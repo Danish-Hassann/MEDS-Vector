@@ -12,6 +12,22 @@ package v_cfg_pkg;
 
     localparam int ELEMENT_IDX_WIDTH = (VLMAX <= 1) ? 1 : $clog2(VLMAX);
 
+    // vtype.vsew encoding; 2'b11 (SEW=64) is not supported by a 32-bit lane
+    // and is decoded as SEW32.
+    typedef enum logic [1:0] {
+        VMUL_SEW8  = 2'b00,
+        VMUL_SEW16 = 2'b01,
+        VMUL_SEW32 = 2'b10
+    } vmul_sew_e;
+    
+    typedef enum logic [1:0] {
+        VMUL_MUL    = 2'b00,   // low  SEW bits
+        VMUL_MULH   = 2'b01,   // high SEW bits, signed   x signed
+        VMUL_MULHU  = 2'b10,   // high SEW bits, unsigned x unsigned
+        VMUL_MULHSU = 2'b11    // high SEW bits, vs2 signed x vs1 unsigned
+    } vmul_op_e;
+    
+
     typedef enum logic [1:0] {
         VDIV_SEW8  = 2'b00,
         VDIV_SEW16 = 2'b01,
